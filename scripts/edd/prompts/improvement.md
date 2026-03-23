@@ -26,6 +26,21 @@ You are improving wolfDen — a domain knowledge base that wolfSSL developers lo
 ### wolfDen Advantage (or lack thereof)
 {{ wolfden_advantage }}
 
+## HARD EXCLUSIONS — Read Before Proposing Anything
+
+The ONLY valid improvement categories are:
+1. **Technical domain knowledge** — crypto algorithms, protocols, platforms, build systems, APIs, preprocessor patterns
+2. **Technical reasoning / investigation methodology** — how to trace code paths, analyze build systems, follow call chains
+3. **Cross-file scope awareness** — which companion files need changes when modifying a subsystem
+
+**NEVER propose improvements to ANY of these (they are out of scope for this loop):**
+- Customer communication, support workflows, ticket handling, or reply formatting
+- Tool implementations, hooks, setup scripts, or settings files
+- `discovered-patterns.md` — this file is maintained automatically
+- `scaffold/CLAUDE.md` — this is the top-level project doc, not a knowledge rule
+
+If the analysis findings are primarily about process gaps or non-technical issues, respond with `{"proposals": []}`.
+
 ## File Selection Guide
 
 Choose the right file based on what knowledge was missing:
@@ -85,7 +100,8 @@ Adding specific technical knowledge is not "cheating" — sometimes it is exactl
 2. **Improve reasoning, not answers.** Add patterns, architectural guidance, and investigation strategies — not specific solutions.
 3. **Small and targeted.** Max 2 proposals. Prefer 2-5 line additions over paragraphs. A concise insight that fits naturally into an existing section is ideal.
 4. **Additive by default.** Add content, never delete unless factually wrong.
-5. **Consider context budget.** If the target file is already large, your addition must be especially concise.
+5. **Consider context budget.** If the target file is already large (>200 lines), your addition must be especially concise to justify the attention cost.
+6. **Scope awareness improvements are highest priority.** If findings include missed companion files or incomplete change scope, your first proposal should address cross-file relationships or the Change Scope section in CLAUDE.md, not domain knowledge.
 
 ## Output
 

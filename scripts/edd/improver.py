@@ -68,6 +68,15 @@ _ROOT_CAUSE_FILE_MAP = {
 
 _MAX_FILE_CHARS = 8000
 
+# Keywords in reasoning/content that indicate a non-technical (out-of-scope) proposal.
+# These should never appear in wolfDen knowledge improvements.
+_NON_TECHNICAL_KEYWORDS = [
+    "customer communication", "support ticket", "ticket lifecycle",
+    "workflow", "presales", "intake", "escalation",
+    "reply format", "tone", "politeness",
+    "sales", "business process",
+]
+
 
 def _count_leading_hashes(line: str) -> int:
     """Count leading '#' characters for markdown header level."""
@@ -178,8 +187,18 @@ def propose_improvements(
     # Validate proposals
     validated = []
     for p in proposals[:2]:
-        if _validate_path(p.get("file", "")):
-            validated.append(p)
+        if not _validate_path(p.get("file", "")):
+            continue
+
+        # Reject non-technical proposals
+        reasoning_text = (p.get("reasoning", "") + " " + p.get("content", "")).lower()
+        non_tech_hits = [kw for kw in _NON_TECHNICAL_KEYWORDS if kw in reasoning_text]
+        if non_tech_hits:
+            logger.warning("Skipping non-technical proposal for %s (keywords: %s)",
+                           p.get("file", "?"), ", ".join(non_tech_hits))
+            continue
+
+        validated.append(p)
 
     return validated
 
