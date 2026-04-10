@@ -18,6 +18,12 @@ If a checklist or boundary file loads, use it as a starting point — then
 verify each item against the actual code. If the code shows a different
 pattern than what the scaffolding suggests, follow the code.
 
+`knowledge/` contains deep domain reference files (crypto patterns, platform
+constraints, integration gotchas). These are **never auto-loaded** — consult
+the index below and read a file only when your task matches its trigger.
+
+@knowledge/index.md
+
 ## Active Repositories
 
 @.repos-context.md

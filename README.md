@@ -33,10 +33,14 @@ Claude automatically loads domain knowledge covering:
 
 ## How It Works
 
-- Root-level rules (`conventions.md`, `discipline.md`, `scope-map.md`) load
-  in every conversation
-- Subdirectory rules (`checklists/`, `boundaries/`, `naming/`) load on-demand
-  when Claude is working in relevant areas
+- **T1** — Root-level rules (`conventions.md`, `discipline.md`, `scope-map.md`)
+  load in every conversation
+- **T2** — Subdirectory rules (`checklists/`, `boundaries/`, `naming/`) load
+  on-demand when Claude is working in relevant areas
+- **T3** — Deep knowledge files in `knowledge/` (crypto patterns, platform
+  constraints, integration gotchas) are never auto-loaded. Claude checks the
+  `knowledge/index.md` routing table and reads a file only when the task
+  matches its trigger
 - A session hook scans `repos/` to tell Claude what you have checked out
 
 You don't need to do anything special — just write your normal prompts.
@@ -53,5 +57,5 @@ The next Claude session will detect it automatically.
 
 ## Contributing Knowledge
 
-Edit files in `scaffold/.claude/rules/` and submit a PR. See the existing
-files for format and style.
+Edit files in `scaffold/.claude/rules/` or `scaffold/knowledge/` and submit
+a PR. See existing files for format and style.

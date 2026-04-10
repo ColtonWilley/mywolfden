@@ -45,3 +45,21 @@ find the existing implementation on a sibling type (e.g., adding
 and trace every file it touches. The sibling implementation defines the
 scope. Replicate its file-by-file pattern rather than inventing
 non-standard APIs.
+
+## Deep Knowledge (T3) Retrieval
+
+The `knowledge/` directory contains domain-specific reference files that are
+NOT auto-loaded. An index of available files is included via `@knowledge/index.md`
+in CLAUDE.md — check the "Read When" column to decide if a file is relevant.
+
+Rules for T3 usage:
+- **Read on demand, not by default.** Only read a knowledge file when your
+  current task matches its "Read When" trigger.
+- **Code is authoritative.** If a knowledge file contradicts the code you
+  are reading, follow the code. Knowledge files capture patterns that were
+  true when written — the code reflects what is true now.
+- **One file at a time.** Read the most relevant file, use it, move on.
+  Do not bulk-load T3 files speculatively.
+- **Failure modes are highest-value.** The "Known Failure Modes" tables in
+  T3 files capture hard-won debugging knowledge that saves hours. When
+  debugging, check the relevant T3 file's failure mode table first.

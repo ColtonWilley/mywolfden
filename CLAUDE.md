@@ -28,21 +28,31 @@ claude              # Claude now knows wolfSSL
 Knowledge is organized in tiers for efficient context loading:
 
 ```
-scaffold/.claude/rules/
-├── conventions.md      # Always loaded — coding style, memory patterns, build system
-├── discipline.md       # Always loaded — verification mandates
-├── scope-map.md        # Always loaded — companion-file relationships
-├── checklists/         # On-demand — task-type checklists (add flag, add API, etc.)
-├── boundaries/         # On-demand — scope disambiguation (OpenSSL compat, TLS versions)
-└── naming/             # On-demand — macro prefixes, PQC naming conventions
+scaffold/
+├── .claude/rules/                  # T1 + T2 (auto-loaded)
+│   ├── conventions.md              # T1 — always loaded: coding style, memory, build
+│   ├── discipline.md               # T1 — always loaded: verification mandates
+│   ├── scope-map.md                # T1 — always loaded: companion-file relationships
+│   ├── checklists/                 # T2 — glob-triggered: task-type checklists
+│   ├── boundaries/                 # T2 — glob-triggered: scope disambiguation
+│   └── naming/                     # T2 — glob-triggered: macro prefixes, PQC naming
+├── knowledge/                      # T3 — cold storage, never auto-loaded
+│   ├── index.md                    # Routing table (included via @ in CLAUDE.md)
+│   ├── crypto/                     # Side channels, FIPS, TLS errors, PQ, SP math
+│   ├── platforms/                  # ESP32, STM32, FreeRTOS, Zephyr, Linux KM
+│   ├── integrations/               # curl, OpenSSH, configure deps
+│   ├── products/                   # wolfTPM, wolfBoot, DO-178C
+│   ├── security/                   # CWE patterns, attack principles
+│   └── implementation/             # I/O callbacks, HW acceleration
 ```
 
-**Root-level rules** load in every conversation — these encode the conventions
-and discipline that apply universally.
+**T1 (always loaded)** — conventions and discipline that apply universally.
 
-**Subdirectory rules** load on-demand when Claude is working in relevant areas.
-This keeps context focused: you get the ESP32 checklist when working on ESP32,
-not when debugging a certificate parser.
+**T2 (glob-triggered)** — loads when Claude is working in relevant file areas.
+
+**T3 (cold, on-demand)** — deep domain knowledge that Claude reads only when
+a task matches the "Read When" trigger in the index. This keeps context lean
+while making ~1,770 lines of domain expertise available when needed.
 
 ## Updating Knowledge
 
@@ -52,4 +62,5 @@ Pull this repo to get the latest knowledge files:
 git pull
 ```
 
-To contribute improvements, edit files in `scaffold/.claude/rules/` and submit a PR.
+To contribute improvements, edit files in `scaffold/.claude/rules/` or
+`scaffold/knowledge/` and submit a PR.
