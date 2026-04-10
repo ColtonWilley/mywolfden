@@ -2,19 +2,21 @@
 
 ## How to Use This Environment
 
-You have domain knowledge files in `.claude/rules/`. They are REFERENCE
-material — background context about wolfSSL conventions and architecture.
+Your primary tool is **reading the actual code**. Read the target function,
+its callers, and analogous functions nearby. The code around your target
+contains the pattern you need to follow.
 
-**Your primary tool is reading the actual code.** Read the target function.
-Read its callers. Read analogous functions nearby. The code around your
-target almost always contains the pattern you need to follow.
+`.claude/rules/` contains scaffolding — not reference material:
+- **`discipline.md`** — Verification mandates (always loaded)
+- **`conventions.md`** — wolfSSL coding/build conventions (always loaded)
+- **`scope-map.md`** — Companion-file pairs (always loaded)
+- **`checklists/`** — Task-type checklists (loaded when touching relevant files)
+- **`boundaries/`** — Scope disambiguation (loaded when touching relevant files)
+- **`naming/`** — Naming conventions (loaded when touching relevant files)
 
-Do NOT apply a pattern from loaded knowledge without first verifying it
-matches what you see in the actual code. If the code shows a different
-pattern than what your loaded knowledge suggests, follow the code.
-
-The knowledge files help you notice things you might miss. They do not
-tell you what to do.
+If a checklist or boundary file loads, use it as a starting point — then
+verify each item against the actual code. If the code shows a different
+pattern than what the scaffolding suggests, follow the code.
 
 ## Active Repositories
 
@@ -43,30 +45,7 @@ wolfssl/
 └── IDE/                    # Platform-specific configs
 ```
 
-## API Naming Conventions
-
-- `wolfSSL_*` — TLS/SSL API (e.g., `wolfSSL_CTX_new()`)
-- `wc_*` — wolfCrypt API (e.g., `wc_AesCbcEncrypt()`)
-- `WOLFSSL_*` — Feature/config macros (e.g., `WOLFSSL_TLS13`)
-- `HAVE_*` — Algorithm availability (e.g., `HAVE_ECC`)
-- `NO_*` — Algorithm exclusion (e.g., `NO_RSA`)
-- `XMALLOC`/`XFREE`/`XREALLOC` — Platform-abstracted memory
-
-## Change Scope Awareness
-
-wolfSSL changes rarely touch just one file. After identifying the core fix,
-check whether these companion changes are needed:
-
-- **Validation/bounds fix in wolfcrypt/src/**: Add negative test cases in
-  `wolfcrypt/test/test.c` (find the algorithm's existing test function)
-- **New public API function**: Declaration in header + check wrapper bindings
-  in `wrapper/rust/`, `wrapper/python/`, `java/` (grep for similar functions)
-- **New `#ifdef` macro**: Register in `.wolfssl_known_macro_extras` (sorted)
-- **Configure flag change**: Update both `configure.ac` AND `CMakeLists.txt`
-- **Error code addition**: Define in `error-crypt.h` or `error-ssl.h`, add
-  string mapping in `wolfcrypt/src/error.c`
-
-## Build System Quick Reference
+## Build System
 
 - **Autoconf**: `./configure --enable-X --disable-Y && make` (primary)
 - **CMake**: `cmake -DWOLFSSL_X=yes ..` (secondary, may lag behind)

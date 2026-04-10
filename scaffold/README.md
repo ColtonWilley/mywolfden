@@ -37,9 +37,10 @@ The next Claude session will detect it automatically.
 
 ## Updating Knowledge
 
-Knowledge files are synced from wolfSSL's internal knowledge base.
-Pull this repo to get the latest:
+Pull this repo to get the latest knowledge files:
 
 ```bash
 git pull
 ```
+
+To contribute improvements, edit files in `.claude/rules/` and submit a PR.

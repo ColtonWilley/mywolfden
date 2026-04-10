@@ -1,79 +1,57 @@
-# mywolfden
+# wolfDen
 
-AI-enhanced development environment for wolfSSL, with an automated
-Eval-Driven Development (EDD) loop that continuously improves the
-knowledge base.
+AI-enhanced development environment for wolfSSL. Run Claude Code inside
+this workspace and it automatically understands wolfSSL architecture,
+conventions, and common development tasks.
 
-## Two Components
-
-### 1. Scaffold (the development environment)
-
-`scaffold/` is a portable Claude Code workspace. Clone this repo, run
-`setup.sh` to pull the wolfSSL repos you work on, then launch `claude` —
-it automatically loads 150+ domain knowledge files covering wolfSSL
-architecture, build system, platforms, integrations, and crypto patterns.
+## Quick Start
 
 ```bash
-cd scaffold
-./setup.sh          # Select and clone wolfSSL repos
+git clone git@github.com:wolfSSL/wolfden.git
+cd wolfden/scaffold
+./setup.sh          # Select and clone the wolfSSL repos you work on
 claude              # Claude now knows wolfSSL
 ```
 
-See [scaffold/README.md](scaffold/README.md) for details.
+## What You Get
 
-### 2. EDD Loop (the automation)
+Claude automatically loads domain knowledge covering:
 
-`scripts/edd/` implements an automated evaluation loop that:
-- Selects merged PRs from wolfssl/wolfssl
-- Runs "bare Claude" (no knowledge) and "wolfDen Claude" (with knowledge)
-  against the same PR
-- Analyzes differences to identify knowledge gaps
-- Proposes and applies improvements to `.claude/rules/` files
-- Re-evaluates to measure impact (improved/regressed/neutral)
+- **Coding conventions** — 4-space indent, `XMALLOC`/`XFREE` patterns,
+  `ForceZero` for secrets, error code chains, macro registration
+- **Verification discipline** — Never claim infrastructure exists without
+  grepping, follow the code over loaded knowledge, check for applicable
+  checklists before scoping work
+- **Scope maps** — Which files change together (error codes → error strings,
+  configure flags → CMake, new algorithms → test registration)
+- **Task checklists** — Step-by-step for common tasks: adding configure flags,
+  crypto callbacks, error codes, hardware acceleration, PKCS#11 algorithms,
+  public APIs, TLS named groups, Linux kernel module changes
+- **Boundary disambiguation** — OpenSSL compat dual paths, PKCS#11 vs CryptoCb,
+  test system conventions, TLS version code paths
+- **Naming conventions** — Macro prefixes, post-quantum naming patterns
 
-## Prerequisites
+## How It Works
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI (`claude`)
-- [GitHub CLI](https://cli.github.com/) (`gh`) — authenticated
-- Python 3.12+
-- `pip install -r requirements.txt`
+- Root-level rules (`conventions.md`, `discipline.md`, `scope-map.md`) load
+  in every conversation
+- Subdirectory rules (`checklists/`, `boundaries/`, `naming/`) load on-demand
+  when Claude is working in relevant areas
+- A session hook scans `repos/` to tell Claude what you have checked out
 
-## Running the EDD Loop
+You don't need to do anything special — just write your normal prompts.
 
-```bash
-# Start the eval server (required — dispatches claude -p calls)
-python -m scripts.edd.eval_server &
+## Adding Repos
 
-# Run a single iteration
-python -m scripts.edd --iterations 1
-
-# Evaluate a specific PR
-python -m scripts.edd --pr 9800
-
-# Dry run (show what would happen)
-python -m scripts.edd --dry-run
-
-# Overnight autonomous loop (up to 20 PRs)
-./run_edd_loop.sh
-```
-
-Reports are written to `edd-reports/`. State is tracked in `edd-state.json`
-(delete it to start fresh).
-
-## Knowledge Sync
-
-`sync_knowledge.py` pulls knowledge from the wolfssl-llm-bots support
-knowledge base and reframes it for developer context. Requires access to
-the source knowledge directory:
+Run `setup.sh` again, or clone manually:
 
 ```bash
-# Via CLI argument
-python sync_knowledge.py --source /path/to/wolfssl-llm-bots/apps/support-knowledge/knowledge
-
-# Via environment variable
-export WOLFDEN_KNOWLEDGE_SOURCE=/path/to/knowledge
-python sync_knowledge.py
-
-# Dry run
-python sync_knowledge.py --source /path/to/knowledge --dry-run
+git clone git@github.com:wolfssl/wolfssl.git repos/wolfssl
 ```
+
+The next Claude session will detect it automatically.
+
+## Contributing Knowledge
+
+Edit files in `scaffold/.claude/rules/` and submit a PR. See the existing
+files for format and style.

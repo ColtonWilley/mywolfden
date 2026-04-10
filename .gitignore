@@ -1,19 +1,13 @@
 # Logs
 *.log
 
-# State backups
-*.bak
-
 # Python
 __pycache__/
 *.pyc
-*.egg-info/
+.venv/
 
 # Cloned repos (re-cloned via setup.sh)
 scaffold/repos/
-
-# Sync state (recomputed on next run)
-sync-state.json
 
 # OS
 .DS_Store
