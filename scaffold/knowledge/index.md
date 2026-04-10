@@ -14,6 +14,7 @@ Code is always authoritative over these files.
 | [crypto/openssl-compat-migration.md](crypto/openssl-compat-migration.md) | OpenSSL compat layer scope, API mapping | Implementing or debugging OPENSSL_EXTRA APIs |
 | [crypto/sp-math.md](crypto/sp-math.md) | SP math variants, configure flags, naming | Working on big-number math, configure flag interactions |
 | [crypto/pq-crypto.md](crypto/pq-crypto.md) | Post-quantum configure flags, hybrid TLS setup | Adding or debugging PQ/hybrid key exchange |
+| [crypto/cert-chain-validation.md](crypto/cert-chain-validation.md) | Certificate error decision tree, -313/-188/-150 triage | Debugging certificate verification failures |
 
 ## Platforms
 
@@ -35,6 +36,7 @@ Code is always authoritative over these files.
 | [integrations/configure-dependencies.md](integrations/configure-dependencies.md) | Flag dependency lookup table | Debugging configure failures, adding new --enable flags |
 | [integrations/curl.md](integrations/curl.md) | vtls backend, wolfSSL+curl build flags | Integrating wolfSSL as curl's TLS backend |
 | [integrations/openssh.md](integrations/openssh.md) | Crypto abstraction layers, OSP patches | Integrating wolfSSL with OpenSSH |
+| [integrations/wolfprovider-openssl3.md](integrations/wolfprovider-openssl3.md) | Provider vs Engine, replace-default FIPS, opensslcoexist | Integrating wolfSSL into OpenSSL 3.x or 1.x apps |
 
 ## Products
 
@@ -42,6 +44,7 @@ Code is always authoritative over these files.
 |------|---------|-----------|
 | [products/wolftpm.md](products/wolftpm.md) | TPM retry pattern, TLS device ID integration | Working on wolfTPM or TPM-backed TLS |
 | [products/wolfhsm.md](products/wolfhsm.md) | HSM client-server, crypto offload via devId, RNG dispatch | Working on wolfHSM or HSM-backed crypto |
+| [products/wolfjni.md](products/wolfjni.md) | Java JNI/JSSE provider, Android BKS, native dependency | Integrating wolfSSL into Java or Android |
 | [products/wolfboot.md](products/wolfboot.md) | Secure boot constraints, image signing | Working on wolfBoot integration |
 | [products/do178c.md](products/do178c.md) | DAL A scope, MISRA-C, safety RTOS | Working on DO-178C / aviation safety builds |
 
@@ -59,3 +62,5 @@ Code is always authoritative over these files.
 |------|---------|-----------|
 | [implementation/embedded-transport.md](implementation/embedded-transport.md) | I/O callbacks, non-blocking retry, DTLS transport | Implementing custom I/O callbacks or transport layers |
 | [implementation/hw-acceleration.md](implementation/hw-acceleration.md) | CryptoDevCb lifecycle, async crypto flow | Implementing hardware crypto backends |
+| [implementation/compiler-asm-debugging.md](implementation/compiler-asm-debugging.md) | Inline asm clobber lists, NO_VAR_ASSIGN_REG, register pressure | Debugging compiler-specific assembly failures |
+| [implementation/asm-optimization-matrix.md](implementation/asm-optimization-matrix.md) | Algorithm-to-platform ASM coverage, configure flags | Enabling assembly optimizations, checking platform support |

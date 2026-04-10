@@ -36,13 +36,35 @@ Reduce further with: `ALT_ECC_SIZE`, SP math (default in 5.x), lower `MAX_CHAIN_
 
 ## Heap Budget
 
-| Operation | Approximate Peak Heap |
-|-----------|----------------------|
-| TLS handshake (RSA 2048) | 40-60 KB |
-| TLS handshake (ECC P-256) | 20-30 KB |
-| Steady-state TLS session | 30-50 KB |
+| Operation | Stack | Heap | Notes |
+|-----------|-------|------|-------|
+| TLS 1.2 handshake (RSA 2048) | 8-12 KB | 40-60 KB | Peak during key exchange |
+| TLS 1.2 handshake (ECC P-256) | 6-8 KB | 20-30 KB | 50-70% less than RSA |
+| TLS 1.3 handshake (ECC P-256) | 6-8 KB | 25-35 KB | +transcript hash overhead |
+| DTLS handshake | +2-4 KB | +5-10 KB | Reassembly buffers |
+| Per-session after handshake | 1-2 KB | 8-15 KB | Ongoing session state |
 
-Use `--enable-trackmemory` during development to measure actual peak usage.
+Use `--enable-trackmemory` / `WOLFMEM_TRACK_STATS` to measure actual peak usage.
+
+## Heap Reduction Flags
+
+- `--enable-lowresource` — reduces buffers, disables non-essential features
+- `--enable-staticmemory` — pre-allocated pools, deterministic usage (see below)
+- `#define ALT_ECC_SIZE` — smaller ECC point structs (significant savings)
+- `#define RSA_LOW_MEM` — less RSA memory at cost of speed
+- `#define NO_SESSION_CACHE` — saves ~2 KB per connection
+- `#define NO_OLD_TLS` / `WOLFSSL_NO_TLS12` — remove unused protocol versions
+- Use DER format for cert loading (avoids Base64 decode memory overhead of PEM)
+
+## Static Memory System (No malloc)
+
+```c
+#define WOLFSSL_STATIC_MEMORY
+byte memory[80000];
+wolfSSL_CTX_load_static_memory(&ctx, wolfSSLv23_client_method_ex,
+                                memory, sizeof(memory), 0, 1);
+```
+Use `wolfSSL_StaticBufferSz()` to determine minimum buffer size.
 
 ## Time Source
 
